@@ -1,5 +1,34 @@
 # week12
 
+## 데이터
+
+- **출처:** 주어진 실습용 데이터(`scores_2026.csv`). 외부 공개 데이터셋이나 별도 원문 출처 링크는 제공되지 않았습니다.
+- **저장소 주소:** https://github.com/J-0516/week12
+- **행 수:** 원본 데이터는 114행이며, 열 이름을 제외한 데이터 행은 114개입니다.
+- **열 수:** 5열
+
+| 열 | 설명 |
+|---|---|
+| `학번` | 학생 번호로 문자형 식별자에 가깝게 읽습니다. |
+| `이름` | 학생 이름을 나타냅니다. |
+| `반` | 학생이 속한 반으로, 정제 후 `1반` 또는 `2반`만 유지합니다. |
+| `과목` | `수학`, `영어`, `프로그래밍` 과목을 나타냅니다. |
+| `점수` | 0~100 사이의 정수 점수입니다. |
+
+### 빈 칸 처리
+
+원본의 `점수` 열에는 빈 칸이 6개 있습니다. 빈 칸은 점수가 0점이거나 결측치를 0으로 대체한 것이 아니며, 점수 평균 계산이 가능한 유효한 관측치가 아니므로 `dropna(subset=["점수"])`로 해당 행을 삭제했습니다.
+
+평균에 값을 대입하는 방식은 일부러 삽입된 빈 칸의 의미를 추정하거나 평균을 왜곡할 수 있으므로 사용하지 않았습니다. 이 규칙을 적용하면 빈 칸이 있는 6개 행이 제거됩니다.
+
+### 정제 조건
+
+- `점수`가 없는 행 삭제
+- 완전히 동일한 중복 행 삭제
+- `반`과 `과목` 문자열 양 끝의 공백 제거
+- `점수`를 수치형으로 변환한 뒤 0 이상 100 이하의 정수만 유지
+- 정제 후 정확히 100행이 남는지 확인
+
 ## 파일 목록
 
 | 파일 | 내용 |
@@ -47,20 +76,31 @@
 
 </details>
 
-## 어느 반이 더 잘했을까?
-
-아래 비교는 점수가 비어 있거나 중복이거나 0~100 범위를 벗어난 행을 정제한 뒤 계산했습니다.
-
-| 관점 | 확인 내용 | 결과와 근거 |
-|---|---|---|
-| 전체로 보면 | 과목을 합친 반별 평균 | 1반은 50개 점수의 평균 **78.24점**, 2반은 50개 점수의 평균 **71.44점**입니다. 전체 평균은 1반이 **6.80점** 높습니다. |
-| 과목별로 보면 | 같은 과목 안에서 반별 평균 비교 | 수학은 1반 **60점**(8개), 2반 **64점**(30개); 영어는 1반 **76점**(12개), 2반 **79점**(12개); 프로그래밍은 1반 **84점**(30개), 2반 **88점**(8개)입니다. 세 과목 모두 2반 평균이 더 높습니다. |
-| 차이가 생긴 이유 | 반별 과목 구성 | 1반은 프로그래밍 점수가 30개, 수학이 8개이고, 2반은 수학이 30개, 프로그래밍이 8개입니다. 과목별 점수 수준과 과목 구성 차이가 합쳐져 전체 평균과 과목별 비교의 결과가 달라집니다. |
-| 반대 근거 | 다른 기준으로 비교하면 | 과목별 평균을 기준으로 보면 2반이 세 과목 모두 높으므로, “2반이 더 잘했다”는 주장도 근거가 있습니다. |
-| 더 알아볼 점 | 공정한 종합 비교 | 과목별 비중을 두 반에 똑같이 적용한 가중 평균을 계산하면 과목 구성 차이를 줄여 비교할 수 있습니다. |
-
 ### 결론
 
 점수 누락·중복·범위 밖 데이터를 정제한 뒤, 과목을 구분하지 않고 전체 점수의 단순 평균으로 비교하면 1반은 78.24점으로 2반의 71.44점보다 6.80점 높아 전체 평균 기준에서는 1반이 더 잘했다고 볼 수 있습니다. 다만 과목별 평균은 2반이 수학·영어·프로그래밍 모두에서 더 높았고, 두 반의 과목별 점수 개수도 서로 달랐으므로 전체 평균만으로 어느 반이 모든 과목에서 더 우수하다고 단정하기는 어렵습니다.
 
 현재 pytest 테스트 4개는 정제 후 100행·두 반 유지·점수 합계 일치와 `mini.csv`의 1반 평균을 확인하며, 어느 반의 전체 평균이 높은지는 별도의 비교 분석 결과입니다.
+
+### 라이선스
+MIT License
+
+Copyright (c) 2026 장준호
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
